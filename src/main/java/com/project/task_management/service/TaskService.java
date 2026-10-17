@@ -11,10 +11,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.project.task_management.DateUtils.FORMATTER;
+
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
-    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
@@ -37,7 +38,7 @@ public class TaskService {
         String content = task.getContent();
         Integer state = task.getState();
         LocalDateTime createdAt = task.getCreatedAt();
-        String createAtFormatted = dtf.format(createdAt);
+        String createAtFormatted = FORMATTER.format(createdAt);
         return new TaskResponse(id,title,content,state,createAtFormatted);
     }
     //3. Get by id
@@ -59,5 +60,12 @@ public class TaskService {
             task.setState(state);
         }
         return mapToResponse(taskRepository.save(task));
+    }
+    //6. Delete (DELETE)
+    public void deleteTaskById(Long id){
+        if(!taskRepository.existsById(id)){
+            throw new RuntimeException("Không tìm thấy task ID: " + id);
+        }
+        taskRepository.deleteById(id);
     }
 }

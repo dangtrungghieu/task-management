@@ -38,6 +38,9 @@ public class TaskController {
     public TaskResponse changeTaskState(@PathVariable Long id, @RequestBody TaskUpdateState taskUpdateState) {
         return taskService.updateTaskById(id, taskUpdateState.state());
     }
-
+    @DeleteMapping("/tasks/{id}")
+    public void deleteTaskById(@PathVariable Long id) {
+        taskService.deleteTaskById(id);
+    }
 
 }
